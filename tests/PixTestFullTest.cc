@@ -91,6 +91,10 @@ void PixTestFullTest::doTest() {
   suite.push_back("trim"); 
   suite.push_back("phoptimization"); 
   suite.push_back("gainpedestal"); 
+  if (fPixSetup->getConfigParameters()->getHdiType() == "fpix"){
+    suite.push_back("bb");
+    suite.push_back("scurves");
+  }
 
   PixTest *t(0); 
 
