@@ -138,6 +138,8 @@ void PixTestPretest::doTest() {
 
   TStopwatch t;
 
+  gStyle->SetPalette(1);
+
   fDirectory->cd();
   PixTest::update(); 
   bigBanner(Form("PixTestPretest::doTest()"));
@@ -370,9 +372,13 @@ void PixTestPretest::setTimings() {
   timer t;
   
   banner(Form("PixTestPreTest::setTimings()"));
+  fApi->_dut->testAllPixels(false);
+  fApi->_dut->maskAllPixels(true);
 
   TLogLevel UserReportingLevel = Log::ReportingLevel();
-  int nTBMs = fApi->_dut->getNTbms();
+  int nTBMs = (fApi->_dut->getTbmType() == "tbm09") ? 4 : 2;
+  if (fApi->_dut->getNTbms() == 0) nTBMs = 0; // reset the above if no TBM is present
+
   uint16_t period = 300;
 
   if (nTBMs==0) {
@@ -459,6 +465,7 @@ void PixTestPretest::setTimings() {
 void PixTestPretest::setVthrCompCalDel() {
   uint16_t FLAGS = FLAG_FORCE_MASKED;
 
+  gStyle->SetPalette(1);
   cacheDacs();
   fDirectory->cd();
   PixTest::update(); 
@@ -572,7 +579,6 @@ void PixTestPretest::setVthrCompCalDel() {
     
     h2->Draw(getHistOption(h2).c_str());
     PixTest::update(); 
-    pxar::mDelay(500); 
     
     fHistList.push_back(h2); 
   }
@@ -919,6 +925,7 @@ void PixTestPretest::programROC() {
 // ----------------------------------------------------------------------
 void PixTestPretest::findWorkingPixel() {
 
+  gStyle->SetPalette(1);
   cacheDacs();
   fDirectory->cd();
   PixTest::update(); 
